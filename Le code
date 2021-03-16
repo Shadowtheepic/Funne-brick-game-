@@ -1,0 +1,101 @@
+import pygame #le library
+pygame.init()
+
+class brick:
+  def __init__(self, xpos, ypos):
+    self.xpos = xpos
+    self.ypos = ypos
+    self.alive = True
+  def draw(self):
+    if self.alive is True:
+      pygame.draw.rect(screen, (255, 0, 255), (self.xpos, self.ypos, 50, 20))
+  def collide(self, x, y):
+    if self.alive is True:
+      if x+20>self.xpos and x<self.xpos+50 and y+20 > self.ypos and y< self.ypos + 20:
+        self.alive = False
+        return True
+
+screen = pygame.display.set_mode((700,500))
+pygame.display.set_caption("breakout")
+clock = pygame.time.Clock()
+
+#game variables
+doExit = False
+px = 300
+py = 450
+
+bx = 200
+by = 200
+
+bVx = 5
+bVy = 5
+
+#draw bruh bricks
+b1 = brick(20,20)
+b2 = brick(70,20)
+b3 = brick(120,20)
+b4 = brick(170,20)
+b5 = brick(220,20)
+b6 = brick(270,20)
+
+while not doExit: #le game loop################
+
+  clock.tick(60)
+
+  for event in pygame.event.get():
+    if event.type == pygame.quit:
+      doExit
+  
+  keys = pygame.key.get_pressed()
+  if keys[pygame.K_LEFT]:
+     px -=5
+  if keys[pygame.K_RIGHT]:
+     px +=5
+
+
+  #physics section
+  bx += bVx
+  by += bVy
+
+  if bx < 0 or bx + 20 > 700:
+    bVx *= -1
+  if by < 0 or by + 20 > 500:
+    bVy *= -1
+
+  #bounce ball off paddle
+  if by + 20 > py and bx + 20 > px and bx < px + 100:
+    bVy *=-1
+
+  if b1.collide(bx, by):
+    bVy *=-1
+  if b2.collide(bx, by):
+    bVy *=-1
+  if b3.collide(bx, by):
+    bVy *=-1
+  if b4.collide(bx, by):
+    bVy *=-1
+  if b5.collide(bx, by):
+    bVy *=-1
+  if b6.collide(bx, by):
+    bVy *=-1
+
+
+#render section
+  screen.fill((0,0,0))
+  pygame.draw.rect(screen, (255, 255, 255), (px, py, 100, 20))
+  pygame.draw.rect(screen, (255, 255, 255), (bx, by, 20, 20))
+
+  b1.draw()
+  b2.draw()
+  b3.draw()
+  b4.draw()
+  b5.draw()
+  b6.draw()
+  
+
+  pygame.display.flip()
+
+
+
+##end of game loop!!#############
+pygame.quit
